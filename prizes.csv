@@ -1,0 +1,15 @@
+# SpinTheWheel — Prize CSV template
+#
+# Only DisplayName and Quantity are required; everything else has a default.
+# Tier must be one of: standard, mid, premium.
+# Color must be a 7-character hex like #FF0000.
+# IsMultiItem accepts: true / false / 1 / 0 / yes / y
+# Items: comma-separated; quote the field if items contain commas.
+# Blank lines and lines starting with "#" are ignored.
+#
+# Required columns: DisplayName, Quantity
+DisplayName,Quantity,WheelLabel,Color,Tier,IsMultiItem,Items,WinnerMessage,Description,SliceCount
+Backpack,10,Backpack,#FF0000,standard,true,"Backpack,Sandals,Flashlight",You won a Backpack!,Choose one item,2
+Shirt,250,Shirt,#2196F3,standard,false,,You won a Shirt!,,2
+Reserved Parking,2,Reserved Pkg,#37474F,premium,false,,You won Reserved Parking!,,1
+Lunch with April,3,Lunch A,#E91E63,premium,false,,You won Lunch with April!,,1

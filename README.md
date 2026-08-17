@@ -2,11 +2,15 @@
 
 A self-service prize wheel game for company events. Players enter their agent ID, spin the wheel, and win a prize — with all player-facing text shown in **English and Spanish**.
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![CI](https://github.com/johnlecates/SpinTheWheelPublic/actions/workflows/ci.yml/badge.svg)](https://github.com/johnlecates/SpinTheWheelPublic/actions/workflows/ci.yml)
+[![GitHub issues](https://img.shields.io/github/issues/johnlecates/SpinTheWheelPublic)](../../issues)
+
 ## About this repository
 
 This is the **public** release of SpinTheWheel. The seed data in `backend/seed_prizes.py` is intentionally generic (no real names, no brand-specific items), and the included `roster.csv` and `prizes.csv` are templates only — replace them with your own data before using the app in production.
 
-Inquiries and bug reports are welcome via the [GitHub Issues](../../issues) tab.
+Inquiries and bug reports are welcome via the [GitHub Issues](../../issues) tab. Security-sensitive issues should follow the [Security Policy](./SECURITY.md) instead.
 
 ## Features
 
@@ -185,4 +189,16 @@ The Prizes tab keeps any open **Winners** panel and **Edit** form in sync with t
 ## Multiple Remotes
 
 A `docs/REMOTES.md` template is included with placeholder URLs you can adapt to your own Git hosting (GitHub, Gitea, GitLab, etc.). Per-host credentials and remote URLs are not tracked in this repo — copy the template locally and edit it to suit your setup.
+
+## License
+
+SpinTheWheel is released under the [MIT License](./LICENSE). You are free to use, modify, and distribute the code, including for commercial purposes, as long as the copyright and license notice are preserved.
+
+## Security
+
+See [SECURITY.md](./SECURITY.md) for how to report vulnerabilities privately.
+
+## Contributing
+
+Bug reports and feature requests are welcome via [GitHub Issues](../../issues). Pull requests are reviewed on a best-effort basis. Please run the build locally (`./start-dev.sh` for development, or `npm run build` / `python -m py_compile` to verify) before submitting.
 

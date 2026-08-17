@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend (Python)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Compile-check
+        working-directory: backend
+        run: |
+          python -m py_compile main.py models.py schemas.py database.py seed_prizes.py
+      - name: Import-smoke
+        working-directory: backend
+        run: |
+          # Quick check that the FastAPI app loads without raising. We don't
+          # need the DB to exist for this — we just want to catch syntax
+          # and top-level errors.
+          python -c "import main; print('main import OK')"
+
+  frontend:
+    name: Frontend (Node)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+
+  scrub:
+    name: Public-package scrub check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure no sensitive data
+        run: |
+          # Fail the build if any of the known private patterns leak
+          # into the public repo. Update these patterns if you add new
+          # private data that needs scrubbing. The workflow file itself
+          # contains these patterns as search terms and is excluded.
+          if grep -rE 'artifactory|tools\.bestbuy\.com|bestbuy\.com' . \
+              --include='*.py' --include='*.jsx' --include='*.js' \
+              --include='*.json' --include='*.md' --include='*.yml' \
+              --include='*.sh' --include='*.html' --include='*.css' \
+              --include='*.csv' . 2>/dev/null \
+              | grep -v '\.git/' \
+              | grep -v '\.github/workflows/ci\.yml'; then
+            echo '::error::Sensitive pattern found in tracked files. Run scripts/scrub-for-public.sh locally to fix.'
+            exit 1
+          fi
+          echo "No sensitive patterns found."

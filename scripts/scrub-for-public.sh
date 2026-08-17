@@ -46,11 +46,13 @@ fi
 
 cd "$PUBLIC_REPO"
 
-echo "==> Wiping public repo working tree (keeping .git, .gitignore, scripts/)..."
-# Remove every tracked file except .gitignore and scripts/
-git ls-files | grep -vE '^\.gitignore$|^scripts/' | xargs -r rm -f
+echo "==> Wiping public repo working tree (keeping .git, .gitignore, scripts/, .github/, LICENSE, SECURITY.md)..."
+# Remove every tracked file except repo-root metadata that we want to
+# preserve across scrubs. Update this list when adding new top-level
+# public files that the private repo does not have.
+git ls-files | grep -vE '^\.gitignore$|^scripts/|^\.github/|^\.?LICENSE$|^\.?SECURITY\.md$' | xargs -r rm -f
 # Clean up any empty directories
-find . -type d -empty -not -path './.git*' -not -path './scripts' -delete 2>/dev/null || true
+find . -type d -empty -not -path './.git*' -not -path './scripts' -not -path './.github*' -delete 2>/dev/null || true
 
 echo "==> Copying tracked files from $PRIVATE_REPO..."
 cd "$PRIVATE_REPO"

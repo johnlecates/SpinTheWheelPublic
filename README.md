@@ -23,6 +23,7 @@ Inquiries and bug reports are welcome via the [GitHub Issues](../../issues) tab.
 - **Per-prize winners** — click any prize to see who has won it, with a live search by name or Agent ID
 - **One spin per employee** — the roster prevents duplicate plays and records what each employee won
 - **Audit history** — every spin is recorded with timestamp, employee, and prize
+- **Browser tab icon** — custom favicon displayed in browser tabs for easy identification
 
 ## Tech Stack
 

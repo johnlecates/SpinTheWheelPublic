@@ -187,6 +187,17 @@ Prize probability is **weighted by remaining quantity** across *active* prizes o
 The Prizes tab keeps any open **Winners** panel and **Edit** form in sync with the latest data after every change, so a renamed prize shows the new name everywhere without needing a manual refresh.
 - The **Prizes** tab in the admin panel shows each prize's live **Odds %** (`remaining ÷ total remaining`), so you can see the rebalanced probabilities after any change.
 
+## Changelog
+
+### v1.5.4 — 2026-08-21
+- **Fixed:** Error messages from the API now display as human-readable text instead of "[object Object]" when the backend returns non-string error details (e.g., FastAPI validation errors). This affects all admin actions including "Remove All Prizes", roster import, prize import, and admin login.
+
+### v1.5.3 — 2026-08-21
+- **Added:** Browser tab icon (favicon) for easy identification.
+
+### v1.5.2 — 2026-08-20
+- Initial public release with full prize wheel functionality, bilingual UI, admin panel, and Docker deployment.
+
 ## Multiple Remotes
 
 A `docs/REMOTES.md` template is included with placeholder URLs you can adapt to your own Git hosting (GitHub, Gitea, GitLab, etc.). Per-host credentials and remote URLs are not tracked in this repo — copy the template locally and edit it to suit your setup.

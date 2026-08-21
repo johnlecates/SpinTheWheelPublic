@@ -48,7 +48,7 @@ if "voided_at" not in spin_history_columns:
 seed_prizes_if_empty()
 sync_labels()
 
-app = FastAPI(title="SpinTheWheel API", version="1.5.3")
+app = FastAPI(title="SpinTheWheel API", version="1.5.4")
 
 app.add_middleware(
     CORSMiddleware,

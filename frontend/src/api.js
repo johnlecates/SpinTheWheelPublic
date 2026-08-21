@@ -7,7 +7,12 @@ async function request(path, options = {}) {
     });
     if (!res.ok) {
         const body = await res.json().catch(() => ({ detail: res.statusText }));
-        throw new Error(body.detail || `HTTP ${res.status}`);
+        // Ensure detail is always a string - handle cases where backend returns
+        // a list or object (e.g., FastAPI validation errors)
+        const detail = typeof body.detail === 'string' 
+            ? body.detail 
+            : JSON.stringify(body.detail);
+        throw new Error(detail || `HTTP ${res.status}`);
     }
     return res.json();
 }
@@ -28,7 +33,8 @@ export const importRoster = (file) => {
     return fetch(`${BASE}/admin/roster/import`, { method: 'POST', body: fd }).then(async (res) => {
         if (!res.ok) {
             const body = await res.json().catch(() => ({ detail: res.statusText }));
-            throw new Error(body.detail || `HTTP ${res.status}`);
+            const detail = typeof body.detail === 'string' ? body.detail : JSON.stringify(body.detail);
+            throw new Error(detail || `HTTP ${res.status}`);
         }
         return res.json();
     });
@@ -65,7 +71,8 @@ export const importPrizes = (file) => {
     return fetch(`${BASE}/admin/prizes/import`, { method: 'POST', body: fd }).then(async (res) => {
         if (!res.ok) {
             const body = await res.json().catch(() => ({ detail: res.statusText }));
-            throw new Error(body.detail || `HTTP ${res.status}`);
+            const detail = typeof body.detail === 'string' ? body.detail : JSON.stringify(body.detail);
+            throw new Error(detail || `HTTP ${res.status}`);
         }
         return res.json();
     });
@@ -116,7 +123,8 @@ export const adminLogin = async (password) => {
     });
     if (!res.ok) {
         const body = await res.json().catch(() => ({ detail: res.statusText }));
-        const err = new Error(body.detail || `HTTP ${res.status}`);
+        const detail = typeof body.detail === 'string' ? body.detail : JSON.stringify(body.detail);
+        const err = new Error(detail || `HTTP ${res.status}`);
         err.status = res.status;
         throw err;
     }

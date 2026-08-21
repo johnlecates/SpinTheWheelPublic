@@ -339,6 +339,25 @@ def add_prize(request: PrizeCreate, db: Session = Depends(get_db)):
     return prize
 
 
+@app.delete("/admin/prizes/all")
+def clear_all_prizes(db: Session = Depends(get_db)):
+    """Wipe all prizes and their spin history. For starting a fresh event.
+
+    This is the prize-side equivalent of "Clear Roster & History". It
+    removes every prize and every SpinHistory row (so no orphans reference
+    a missing prize). After calling this, the wheel is empty until the
+    admin uploads a fresh CSV (or uses Re-seed).
+    """
+    history_count = db.query(SpinHistory).delete()
+    prize_count = db.query(Prize).delete()
+    db.commit()
+    return {
+        "detail": f"Removed {prize_count} prizes and {history_count} spin-history rows.",
+        "prizes_removed": prize_count,
+        "history_removed": history_count,
+    }
+
+
 @app.delete("/admin/prizes/{prize_id}")
 def remove_prize(prize_id: int, db: Session = Depends(get_db)):
     """Remove a prize from the wheel (soft delete).
@@ -637,25 +656,6 @@ def get_stats(db: Session = Depends(get_db)):
         shortage=shortage,
         warning=shortage > 0,
     )
-
-
-@app.delete("/admin/prizes/all")
-def clear_all_prizes(db: Session = Depends(get_db)):
-    """Wipe all prizes and their spin history. For starting a fresh event.
-
-    This is the prize-side equivalent of "Clear Roster & History". It
-    removes every prize and every SpinHistory row (so no orphans reference
-    a missing prize). After calling this, the wheel is empty until the
-    admin uploads a fresh CSV (or uses Re-seed).
-    """
-    history_count = db.query(SpinHistory).delete()
-    prize_count = db.query(Prize).delete()
-    db.commit()
-    return {
-        "detail": f"Removed {prize_count} prizes and {history_count} spin-history rows.",
-        "prizes_removed": prize_count,
-        "history_removed": history_count,
-    }
 
 
 @app.post("/admin/prizes/reset")

@@ -8,7 +8,8 @@ services:
     volumes:
       - ./data:/app/data
     environment:
-      - DATABASE_URL=sqlite:////app/data/spinwheel.db
+      DATABASE_URL: sqlite:////app/data/spinwheel.db
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-spinadmin}
     restart: unless-stopped
 
   frontend:

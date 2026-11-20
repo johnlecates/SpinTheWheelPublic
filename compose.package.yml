@@ -1,0 +1,22 @@
+name: spinthewheel
+
+services:
+  backend:
+    image: ghcr.io/johnlecates/spinthewheelpublic-backend:${SPINTHEWHEEL_IMAGE_TAG:-1.6.0}
+    environment:
+      DATABASE_URL: sqlite:////app/data/spinwheel.db
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-spinadmin}
+    volumes:
+      - spinwheel-data:/app/data
+    restart: unless-stopped
+
+  frontend:
+    image: ghcr.io/johnlecates/spinthewheelpublic-frontend:${SPINTHEWHEEL_IMAGE_TAG:-1.6.0}
+    ports:
+      - "${SPINTHEWHEEL_PORT:-3000}:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  spinwheel-data:

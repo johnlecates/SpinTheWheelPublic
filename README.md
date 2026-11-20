@@ -52,6 +52,26 @@ docker compose up --build
 - Frontend → http://localhost:3000
 - Backend API → http://localhost:8001
 
+### Published Container Package
+
+The frontend and backend are published as public multi-architecture images in GitHub Container Registry (GHCR). Install the package without a local clone by using `compose.package.yml` from the repository:
+
+```bash
+ADMIN_PASSWORD='choose-a-strong-password' \
+  docker compose -f compose.package.yml up -d
+```
+
+This starts the app at `http://localhost:3000` and stores SQLite data in the `spinwheel-data` named volume. To select a different host port or image release, set `SPINTHEWHEEL_PORT` or `SPINTHEWHEEL_IMAGE_TAG` before running Compose.
+
+```bash
+docker compose -f compose.package.yml pull
+docker compose -f compose.package.yml up -d
+```
+
+The package is a container pair, not an npm library, because a usable installation requires the React/nginx frontend, FastAPI backend, and persistent SQLite storage. GitHub Actions publishes images for tags and `main` builds; the package must be marked **public** in the repository's Packages settings before unauthenticated pulls will work.
+
+Change the default admin password before exposing the app outside a trusted environment. If the package is not yet public, authenticate with `docker login ghcr.io` before pulling it.
+
 ## Roster Import
 
 The roster is a CSV with two columns: `AgentID,Name` (a header row is optional and skipped).
@@ -188,6 +208,11 @@ The Prizes tab keeps any open **Winners** panel and **Edit** form in sync with t
 - The **Prizes** tab in the admin panel shows each prize's live **Odds %** (`remaining ÷ total remaining`), so you can see the rebalanced probabilities after any change.
 
 ## Changelog
+
+### v1.6.0 — 2026-11-20
+- **Added:** Public GHCR publishing for separate multi-architecture backend and frontend images.
+- **Added:** Image-based `compose.package.yml` for installing the app without a source build.
+- **Changed:** Docker Compose now accepts `ADMIN_PASSWORD` for both package and source deployments.
 
 ### v1.5.4 — 2026-08-21
 - **Fixed:** Error messages from the API now display as human-readable text instead of "[object Object]" when the backend returns non-string error details (e.g., FastAPI validation errors). This affects all admin actions including "Remove All Prizes", roster import, prize import, and admin login.

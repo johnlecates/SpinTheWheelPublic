@@ -35,7 +35,9 @@ jobs:
       - name: Read application version
         id: version
         shell: bash
-        run: echo "version=$(node -p \"require('./frontend/package.json').version\")" >> "$GITHUB_OUTPUT"
+        run: |
+          VERSION=$(node -e "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('frontend/package.json', 'utf8')); process.stdout.write(pkg.version)")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Log in to GHCR
         uses: docker/login-action@v3

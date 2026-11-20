@@ -67,3 +67,4 @@ Thumbs.db
 
 # --- Project-specific: keep data/ folder but ignore its DB files ---
 # (data/ itself is kept so the directory structure is preserved; *.db above excludes the contents)
+.PATS.env
